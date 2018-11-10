@@ -10,3 +10,6 @@ logs/
 
 # test file
 test.py
+
+# dataset for practice
+MNIST_data/
