@@ -1,0 +1,12 @@
+# editor files
+.vscode/
+.idea/
+
+# virtual env files
+venv/
+
+# tensorflow logs
+logs/
+
+# test file
+test.py
