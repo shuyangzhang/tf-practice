@@ -58,3 +58,5 @@ for i in range(1000):
 
         plt.pause(0.1)
     # sess.run(tf.global_variables())
+
+## DISPLAY: True, PYTHONUNBUFFER: 1 to fix that plot is not dynamic in Pycharm
