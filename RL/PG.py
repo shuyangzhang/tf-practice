@@ -108,7 +108,7 @@ with tf.Session() as sess:
 
         all_rewards = discount_and_normalize_rewards(all_rewards, discount_rate)
         feed_dict = {}
-        for var_index, grad_placeholder in enumerate(gradient_placeholders):
+        for var_index, grad_placeholder in enumerate(gradient_placeholders):    # why and what happend in it?
 
             # multiply the gradients by the action scores, and compute the mean
             mean_gradients = np.mean(
