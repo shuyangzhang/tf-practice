@@ -3,7 +3,7 @@
 import numpy as np
 
 nan = np.nan
-T = np.array([
+T = np.array([   # meaning of axis , (state, action, next_state) -> (s, a, s')
     [[0.7, 0.3, 0.0], [1.0, 0.0, 0.0], [0.8, 0.2, 0.0]],
     [[0.0, 1.0, 0.0], [nan, nan, nan], [0.0, 0.0, 1.0]],
     [[nan, nan, nan], [0.8, 0.1, 0.1], [nan, nan, nan]]
