@@ -4,41 +4,43 @@ import tensorflow as tf
 import random
 import numpy as np
 
-from RL.tic_tac_toe import TicTacToe
+from tic_tac_toe import TicTacToe
 
 n_inputs = 9
 n_hidden1 = 20
 n_hidden2 = 20
 n_outputs = 9
-initializer = tf.contrib.layers.variance_scaling_initializer()
-b_initializer = tf.initializers.constant(0.01)
+
 
 X = tf.placeholder(tf.float32, shape=[None, n_inputs])
-hidden1 = tf.layers.dense(X, n_hidden1, activation=tf.nn.relu, use_bias=True,
-                          kernel_initializer=tf.truncated_normal_initializer(mean=0, stddev=0.02),
-                          bias_initializer=b_initializer,
+hidden1 = tf.layers.dense(X,
+                          units=n_hidden1,
+                          activation=tf.nn.relu,
+                          use_bias=True,
+                          kernel_initializer=tf.truncated_normal_initializer(mean=0., stddev=0.02),
+                          bias_initializer=tf.constant_initializer(0.01),
                           )
 hidden2 = tf.layers.dense(hidden1, n_hidden2, activation=tf.nn.relu, use_bias=True,
-                          kernel_initializer=tf.truncated_normal_initializer(mean=0, stddev=0.02),
-                          bias_initializer=b_initializer,
+                          kernel_initializer=tf.truncated_normal_initializer(mean=0., stddev=0.02),
+                          bias_initializer=tf.constant_initializer(0.01),
                           )
 logits = tf.layers.dense(hidden2, n_outputs, activation=None)
 prob = tf.nn.softmax(logits)
 action = tf.multinomial(logits, num_samples=1)
 
-log_prob = logits - tf.log(tf.reduce_sum(tf.exp(logits)))
+log_prob = logits - tf.log(tf.reduce_sum(tf.exp(logits), axis=1))
 
-return_placeholders = tf.placeholder(tf.float32, [None, 9])
+return_placeholders = tf.placeholder(tf.float32, [None, 1])
 action_placeholders = tf.placeholder(tf.float32, [None, 9])
-
-policy_gradient = tf.multiply(
+tf.one_hot(action, depth=9, axis=-1)
+policy_gradient_with_return = - tf.reduce_mean(tf.multiply(
     return_placeholders,
-    tf.reduce_sum(tf.multiply(action_placeholders, log_prob), axis=1, keepdims=True)
-)
+    tf.reduce_sum(action_placeholders*log_prob, axis=1, keepdims=True)
+))
 
-LR = 0.01
+LR = 0.001
 
-training_op = tf.train.AdamOptimizer(LR).minimize(policy_gradient)
+training_op = tf.train.AdamOptimizer(LR).minimize(policy_gradient_with_return)
 
 # optimizer = tf.train.AdamOptimizer(LR)
 #
@@ -131,10 +133,7 @@ with tf.Session() as sess:
             # all_rewards.append(current_rewards)
             # all_gradients.append(current_gradients)
 
-            while len(current_rewards) != 9:
-                current_rewards.append(0)
-            while len(current_act) != 9:
-                current_act.append(0)
+
 
             current_returns = discount_rewards(current_rewards, discount_rate)
 
