@@ -7,8 +7,8 @@ import numpy as np
 from RL.tic_tac_toe import TicTacToe
 
 n_inputs = 9
-n_hidden1 = 20
-n_hidden2 = 20
+n_hidden1 = 50
+n_hidden2 = 50
 n_outputs = 9
 
 
@@ -76,7 +76,7 @@ def discount_and_normalize_rewards(all_rewards, discount_rate):
     reward_std = flat_rewards.std()
     return [(discounted_rewards - reward_mean) / reward_std for discounted_rewards in all_discounted_rewards]
 
-n_iterations = 100000
+n_iterations = 50000
 n_max_step = 9
 n_games_per_update = 10
 discount_rate = 0.95
