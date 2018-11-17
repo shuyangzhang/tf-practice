@@ -84,10 +84,10 @@ for i in range(1000):
     sess.run(train_step, feed_dict={xs: batch_x, ys: batch_y, keep_prob: 0.5})
     if i % 50 == 0:
         now_time = time.time()
-        print(f"cost {now_time - start_time}")
+        print("cost {}".format(str(now_time - start_time)))
         print(compute_accuracy(mnist.test.images[:1000], mnist.test.labels[:1000]))
 
 end_time = time.time()
-print(f"total cost {end_time - start_time}")
+print("total cost {}".format(str(end_time - start_time)))
 
 
