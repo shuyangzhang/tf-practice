@@ -3,8 +3,9 @@
 import numpy as np
 
 class TicTacToe(object):
-    def __init__(self):
+    def __init__(self, tie_reward=0.5):
         self.reset()
+        self.tie_reward = tie_reward
 
     def step(self, player, position):
         position = self._position_to_xy(position)
@@ -42,7 +43,7 @@ class TicTacToe(object):
 
     def _is_done(self):
         if 0 not in self.chessboard:
-            self.reward = 0.5
+            self.reward = self.tie_reward
             self.done = True
         else:
             if 3 in np.sum(self.chessboard, axis=0) or 3 in np.sum(self.chessboard, axis=1):
