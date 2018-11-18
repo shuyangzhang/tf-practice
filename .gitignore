@@ -16,3 +16,6 @@ MNIST_data/
 
 # variables saving by tensorflow
 my_net/
+
+# binary python files
+*.pyc
