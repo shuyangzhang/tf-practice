@@ -6,12 +6,17 @@ import pandas as pd
 
 
 class QLearningTable(object):
-    def __init__(self, actions, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+    def __init__(self, actions, learning_rate=0.01, reward_decay=0.95, e_greedy=0.9, q_table=None):
         self.actions = actions
         self.lr = learning_rate
         self.gamma = reward_decay
         self.epsilon = e_greedy
-        self.q_table = pd.DataFrame(columns=self.actions)
+        self.file_path = q_table
+        try:
+            self.q_table = pd.read_csv(self.file_path, index_col=0) if q_table else pd.DataFrame(columns=self.actions)
+        except Exception as e:
+            print(e)
+            self.q_table = pd.DataFrame(columns=self.actions)
 
     def choose_action(self, observation):
         self.check_state_exist(observation)
@@ -40,3 +45,8 @@ class QLearningTable(object):
                     name=state
                 )
             )
+
+    def __del__(self):
+        if self.file_path:
+            self.q_table.to_csv(self.file_path)
+            print("q_table_file has been saved/updated.")
